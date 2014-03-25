@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>30 Drupal 7 API Functions You Should Already Know</title>
+
+		<meta name="description" content="A story about discovery, trial and error, and having fun!">
+		<meta name="author" content="Fredric Mitchell">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="phase2/phase2.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>30 Awesome Drupal 7 API Functions</h1>
+					<h3>(You Should Already Know)</h3>
+					<p>
+						<small>Created by <a href="http://brightplum.com">Fredric Mitchell</a> / <a href="http://twitter.com/fredricmitchell">@fredricmitchell</a></small>
+					</p>
+                    <p>
+                        <small>http://brightplumbox.com/30Drupal7API/</small>
+                    </p>
+				</section>
+
+                <section>
+                    <h2>Assumptions</h2>
+                    <ol>
+                        <li class="fragment">Show Me the Code!</li>
+                        <li class="fragment">Written something custom (familiar with PHP)</li>
+                        <li class="fragment">You like using APIs</li>
+                        <li class="fragment">Want to learn the "Drupal Way"</li>
+                        <li class="fragment">Drupal as framework</li>
+                    </ol>
+                </section>
+
+				<section>
+					<section>
+                        <h2>Quick Intro</h2>
+                        <h3>Paid Gig</h3>
+                        <p>
+                            <img src="http://distilleryimage8.ak.instagram.com/039fa8ee425811e3939222000a9f1385_8.jpg" height="450px"/>
+                        </p>
+                        <p>Senior Developer at Phase2 Technology</p>
+                    </section>
+                    <section>
+                        <h2>Quick Intro</h2>
+                        <h3>Passions</h3>
+                        <p>
+                            <img src="http://images.ak.instagram.com/media/2011/08/03/9834110b48784fcf95e9c5f3e96c4da9_7.jpg" height="450px"/>
+                        </p>
+                        <p>Drupal, DRY / KISS, Strat. Comm., Graphic Novels</p>
+                    </section>
+                    <section>
+                        <h2>Quick Intro</h2>
+                        <h3>Learning</h3>
+                        <p>
+                            <img src="http://distilleryimage10.ak.instagram.com/021e2084f81e11e1b62722000a1e8b36_7.jpg" height="450px"/>
+                        </p>
+                        <p>Javascript, Patience, Spanish</p>
+                    </section>
+				</section>
+
+				<section>
+					<section>
+                        <h2>URL Shortcuts</h2>
+                        <p>Quick and easy ways to find API functions and Drupal projects.</p>
+                        <h3 class="fragment">d7, dp</h3>
+                    </section>
+                    <section>
+                        <h2>Firefox</h2>
+                        <p>http://bit.ly/18XPrjF</p>
+                    </section>
+                    <section>
+                        <h2>Chrome</h2>
+                        <p>http://bit.ly/1dbB0eL</p>
+                    </section>
+				</section>
+
+                <section>
+                    <section>
+                        <h2>Strings</h2>
+                        <h3>Print stuff.</h3>
+                    </section>
+                    <section>
+                        <h2>t()</h2>
+                        <h3>translate, sanitize</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+$text = t(“@name's blog”, array('@name' => $value))
+// Note: @name vs. %name vs. !name
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>l()</h2>
+                        <h3>internal, external url</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+$link = l(t('Link text'), 'node/34', array(
+    'attributes' => array(
+        'class' => array('about-link'),
+    )
+));
+// Note: automatic alias replacement via url()
+                            </code>
+                        </pre>
+                    </section>
+
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Rendering</h2>
+                        <h3>Make stuff pretty.</h3>
+                    </section>
+                    <section>
+                        <h2>drupal_render()</h2>
+                        <h3>given render array, return HTML</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+$render = array(
+    'first_para' => array(
+        '#type' => 'markup',
+        '#markup' => 'A first paragraph',
+    ),
+    'second_para' => array(
+        array('first item', 'second item', 'third item'),
+            '#theme' => 'item_list',
+    ),
+);
+return drupal_render($render);
+                            </code>
+                        </pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Nodes</h2>
+                        <h3>Store content, data.</h3>
+                    </section>
+                    <section>
+                        <h2>node_load_multiple()</h2>
+                        <h3>load nodes from db</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+$nodes = node_load_multiple($nids = array())
+// Note: calls entity_load(); statically cached
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>node_view()</h2>
+                        <h3>a render array for given node</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+                                $node = node_view($node, $view_mode);
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>node_view_multiple()</h2>
+                        <h3>a render array of many nodes</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+                                $nodes = node_view_multiple($nodes);
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>node_delete_multiple()</h2>
+                        <h3>delete nodes from db</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+                                node_delete_multiple($nids = array());
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>node_object_prepare()</h2>
+                        <h3>prepare object for editing</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+$node = new StdClass();
+
+// Set type first.
+$node->type = 'foobar';
+
+node_object_prepare($node);
+// Note: Current user will be set as uid.
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>node_save()</h2>
+                        <h3>save a node to db</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+node_save($node);
+// Note: nothing is returned
+                            </code>
+                        </pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Menus</h2>
+                        <h3>Allow users to navigate to content, data.</h3>
+                    </section>
+                    <section>
+                        <h2>hook_menu()</h2>
+                        <h3>define menu items and callbacks</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+function mymodule_menu() {
+    $items['abc/def'] = array(
+        'page callback' => 'mymodule_abc_view',
+    );
+    return $items;
+}
+
+function mymodule_abc_view($ghi = 0, $jkl = '') {
+    // ...
+}
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>menu_get_item()</h2>
+                        <h3>get a router item</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+$item = menu_get_item($path);
+// Note: returns array defined in hook_menu()
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>menu_get_object()</h2>
+                        <h3>load an object from router item</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+$node = menu_get_object();
+$type = $node->type;
+// Note: Use instead of arg()
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>menu_tree_page_data()</h2>
+                        <h3>get data for menu tree</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+                                $tree = menu_tree_page_data('main-menu');
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>menu_tree_output()</h2>
+                        <h3>return a menu tree render array</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+// Build a HTML menu
+$tree = menu_tree_page_data('main-menu');
+$menu = menu_tree_output($tree, 1);
+return drupal_render($menu);
+                            </code>
+                        </pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Taxonomy</h2>
+                        <h3>Categorize content, data.</h3>
+                    </section>
+                    <section>
+                        <h3>taxonomy_vocabulary_machine_name_load()</h3>
+                        <h4>get vocabulary by machine name</h4>
+                        <pre>
+                            <code data-trim contenteditable>
+// Get a taxonomy object.
+$v = taxonomy_vocabulary_machine_name_load('vocab');
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2> taxonomy_get_tree()</h2>
+                        <h3>create hierarchy from vocab</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+// Get a taxonomy object.
+$v = taxonomy_vocabulary_machine_name_load('vocab');
+
+// Build an array of taxonomy terms.
+$terms = taxonomy_get_tree($v->vid);
+foreach ($terms as $term) {
+    $options[$term->tid] = $term->name;
+}
+                            </code>
+                        </pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Fields</h2>
+                        <h3>Organize content, data at various pivot points.</h3>
+                    </section>
+                    <section>
+                        <h2>field_info_field()</h2>
+                        <h3>return array of field data</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+// Get info a field name.
+field_info_field('field_name');
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>field_info_instance()</h2>
+                        <h3>return an array of field instance data</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+// Get info on field name.
+field_info_field('field_name');
+
+// Get info on instance of field name from a bundle.
+field_info_instance('node', 'field_name', 'article');
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>field_create_field()</h2>
+                        <h3>creates a field</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+// Note: Requires proper field / instance data array which you can get from a features export.
+
+$field_bases = array();
+
+// Exported field_base: 'field_sc_html'
+$field_bases['field_sc_html'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_sc_html',
+    'foreign keys' => array(
+        'format' => array(
+            'columns' => array(
+                'format' => 'format',
+            ),
+            'table' => 'filter_format',
+        ),
+    ),
+    'indexes' => array(
+        'format' => array(
+            0 => 'format',
+        ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'text_long',
+);
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>field_create_instance()</h2>
+                        <h3>create instance of field, binding it to a bundle</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+// Note: Requires proper field / instance data array which you can get from a features export.
+
+$field_instances = array();
+
+// Exported field_instance: 'bean-field_sc_html'
+$field_instances['bean-field_sc_html'] = array(
+    'bundle' => 'oms_sidebar_content',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+        'default' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+        ),
+    ),
+    'entity_type' => 'bean',
+    'field_name' => 'field_sc_html',
+    'label' => 'HTML',
+    'required' => 0,
+    'settings' => array(
+        'text_processing' => 1,
+        'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+        'active' => 1,
+        'module' => 'text',
+        'settings' => array(
+            'rows' => 5,
+        ),
+        'type' => 'text_textarea',
+        'weight' => 2,
+    ),
+);
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>Bonus!</h2>
+                        <h3>Using the field API functions</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+function mymodule_install_fields($fields, $instance_fields, $type = 'node', $bundle) {
+    foreach ($fields as $field) {
+        // Create the field if it doesn't exist.
+        if (!field_info_field($field['field_name'])) {
+            field_create_field($field);
+        }
+    }
+    unset($field);
+    foreach ($instance_fields as $field) {
+        if (!field_info_instance($type, $field['field_name'], $bundle)) {
+            field_create_instance($field);
+        }
+    }
+}
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>field_update_field()</h2>
+                        <h3>update field</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+// Update field details.
+$field = field_info_field('field_name');
+if (isset($my_condition)) {
+    field_update_field($field);
+}
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>field_update_instance()</h2>
+                        <h3>updates field instance</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+// Update field instance.
+$instance = field_info_instance('node', $field_name, $bundle);
+if ($instance) {
+    field_update_instance($instance);
+}
+// Note: Can use in hook_update() to avoid UI config conflicts.
+                            </code>
+                        </pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Alters</h2>
+                        <h3>Change the assumptions.</h3>
+                    </section>
+                    <section>
+                        <h2>drupal_alter()</h2>
+                        <h3>passes variables to be changed</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+$data = array(
+    'key1' => 'value1',
+    'key2' => 'value2',
+);
+
+// Call all modules implementing hook_my_data_alter
+drupal_alter('my_data', $data);
+
+// Note: Use sparingly. hook_theme() is preferred for overriding styles.
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>hook_form_alter()</h2>
+                        <h3>change a form before rendered</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+function mymodule_form_alter(&$form, &$form_state) {
+    $form['new_checkbox'] = array(
+        '#type' => 'checkbox',
+        '#title' => t ('Subscribe'),
+    );
+);
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>hook_form_FORM_ID_alter()</h2>
+                        <h3>change a specific form by FORM ID before rendered</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+function mymodule_form_node_form_alter() {
+    ...
+);
+                            </code>
+                        </pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>URLs</h2>
+                        <h3>Grab the $_GET</h3>
+                    </section>
+                    <section>
+                        <h3>drupal_get_query_parameters()</h3>
+                        <h4>process url query</h4>
+                        <pre>
+                            <code data-trim contenteditable>
+// URL: http://mysite.com?text=foo&date=2013-09-14
+
+$param = drupal_get_query_parameters();
+
+// Values
+// $param['text'] = foo
+// $param['date'] = 2013-09-14
+                            </code>
+                        </pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Paths</h2>
+                        <h3>Where am I?</h3>
+                    </section>
+                    <section>
+                        <h2>drupal_get_path()</h2>
+                        <h3>returns path to a system item</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+// Path to a file
+$path = drupal_get_path('theme', 'mytheme') . '/mycustom.js';
+
+// Include CSS or JS
+drupal_add_js($path), array(
+    'type' => 'file',
+    'scope' => 'footer',
+));
+
+// Note: Also consider libraries_get_path()
+                            </code>
+                        </pre>
+                    </section>
+                </section>
+
+                <section>
+                    <h2>module_load_include()</h2>
+                    <h3>loads a module include file</h3>
+                    <pre>
+                        <code data-trim contenteditable>
+// Load node.admin.inc from the node module.
+module_load_include('inc', 'node', 'node.admin');
+
+// Load content_types.inc from the node module.
+module_load_include('inc', 'node', 'content_types');
+                        </code>
+                    </pre>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Querying Entities</h2>
+                        <h3>Join ALL the tables!</h3>
+                    </section>
+                    <section>
+                        <h2>EntityFieldQuery</h2>
+                        <h3>a class to query entities</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+// Query articles
+$query = new EntityFieldQuery();
+
+$query
+    ->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'article')
+    ->propertyCondition('status', 1);
+
+$result = $query->execute();
+$nids = array_keys($result['node']);
+$nodes = node_load_multiple($nids);
+
+// Note: EFQ presentation at http://bit.ly/top10efq
+                            </code>
+                        </pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>1 - 10</h2>
+                        <ul>
+                            <li>t()</li>
+                            <li>l()</li>
+                            <li>drupal_render()</li>
+                            <li>entity_load()</li>
+                            <li>node_load_multiple()</li>
+                            <li>node_view()</li>
+                            <li>node_view_multiple()</li>
+                            <li>node_delete_multiple()</li>
+                            <li>node_object_prepare()</li>
+                            <li>node_save()</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>11 - 20</h2>
+                        <ul>
+                            <li>hook_menu()</li>
+                            <li>menu_get_item()</li>
+                            <li>menu_get_object()</li>
+                            <li>menu_tree_page_data()</li>
+                            <li>menu_tree_output()</li>
+                            <li>taxonomy_get_tree()</li>
+                            <li>taxonomy_vocabulary_machine_name_load()</li>
+                            <li>field_info_field()</li>
+                            <li>field_info_instance()</li>
+                            <li>field_create_field()</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>21 - 30</h2>
+                        <ul>
+                            <li>field_create_instance()</li>
+                            <li>field_update_field()</li>
+                            <li>field_update_instance()</li>
+                            <li>drupal_alter()</li>
+                            <li>hook_form_alter()</li>
+                            <li>hook_form_FORM_ID_alter()</li>
+                            <li>drupal_get_query_parameters()</li>
+                            <li>drupal_get_path()</li>
+                            <li>module_load_include()</li>
+                            <li>EntityFieldQuery</li>
+                        </ul>
+                    </section>
+                </section>
+
+				<section>
+					<h2>Questions?</h2>
+					<h3>By Fredric Mitchell / @fredricmitchell</h3>
+                    <p><strong>Slides:</strong> http://brightplumbox.com/30Drupal7API/</p>
+                    <p><strong>Slides Repo:</strong> https://github.com/fmitchell/30Drupal7API</p>
+                    <p><strong>Feedback:</strong> joind.in/talk/view/10311</p>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'phase2/branding.js', async: true, condition: function() {return !!document.body.classList; }}
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
