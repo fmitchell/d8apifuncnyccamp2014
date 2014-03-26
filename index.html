@@ -204,7 +204,7 @@ $markup = theme('table', array(
     'rows' => $rows,
     'attributes' => array('id' => 'my-module-table')
 ));
-                                
+
 // Render a pager.
 $markup .= theme('pager');
                             </code>
@@ -236,12 +236,25 @@ $markup .= drupal_render($pager);
                         <h3>Store content, data.</h3>
                     </section>
                     <section>
-                        <h2>node_load_multiple()</h2>
+                        <h2>Wait...what!??! Hello? Entities!</h2>
+                        <h3>Everything is entities now, right?</h3>
+                        <p class="fragment">Yes. I was just getting there.</p>
+                    </section>
+                    <section>
+                        <h2>entity_load_multiple()</h2>
+                        <h3>D7: node_load_multiple()</h3>
                         <h3>load nodes from db</h3>
+                        <p class="fragment">node_load_multiple wraps around entity_load_multiple</p>
+                        <p class="fragment">entity_load_multiple wraps around $controller->loadMultiple()</p>
+                        <p class="fragment">$controller is the StorageController for the entity</p>
+                        <p class="fragment">The storage controller is likely DatabaseStorageController class</p>
+                    </section>
+                    <section>
+                        <h2>entity_load_multiple()</h2>
                         <pre>
                             <code data-trim contenteditable>
-$nodes = node_load_multiple($nids = array())
-// Note: calls entity_load(); statically cached
+$nodes = entity_load_multiple('node', $nids = array())
+// Note: Cached
                             </code>
                         </pre>
                     </section>
