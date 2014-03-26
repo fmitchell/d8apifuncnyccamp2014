@@ -625,29 +625,21 @@ function mymodule_install_fields($fields, $instance_fields, $type = 'node', $bun
                         <p>?</p>
                     </section>
                     <section>
-                        <h2>field_update_field()</h2>
-                        <h3>update field</h3>
+                        <h2>save()</h2>
+                        <h3>D7: field_update_field()</h3>
+                        <h3>D7: field_update_instance()</h3>
+                        <h3>update field, field instance configs</h3>
                         <pre>
                             <code data-trim contenteditable>
-// Update field details.
-$field = field_info_field('field_name');
-if (isset($my_condition)) {
-    field_update_field($field);
-}
-                            </code>
-                        </pre>
-                    </section>
-                    <section>
-                        <h2>field_update_instance()</h2>
-                        <h3>updates field instance</h3>
-                        <pre>
-                            <code data-trim contenteditable>
-// Update field instance.
-$instance = field_info_instance('node', $field_name, $bundle);
-if ($instance) {
-    field_update_instance($instance);
-}
-// Note: Can use in hook_update() to avoid UI config conflicts.
+// Updating field.
+$field->cardinality = 2;
+$field->save();
+
+// Deleting field.
+entity_load('field_config', 'field_name')->delete();
+
+// Deleting instance.
+entity_load('field_instance_config', 'field_instance_name')->delete();
                             </code>
                         </pre>
                     </section>
@@ -659,7 +651,8 @@ if ($instance) {
                         <h3>Change the assumptions.</h3>
                     </section>
                     <section>
-                        <h2>drupal_alter()</h2>
+                        <h2>ModuleHandler::alter()</h2>
+                        <h3>D7: drupal_alter()</h3>
                         <h3>passes variables to be changed</h3>
                         <pre>
                             <code data-trim contenteditable>
@@ -669,7 +662,7 @@ $data = array(
 );
 
 // Call all modules implementing hook_my_data_alter
-drupal_alter('my_data', $data);
+\Drupal::moduleHandler()->alter('my_data', $data);
 
 // Note: Use sparingly. hook_theme() is preferred for overriding styles.
                             </code>
@@ -692,9 +685,39 @@ function mymodule_form_alter(&$form, &$form_state) {
                     <section>
                         <h2>hook_form_FORM_ID_alter()</h2>
                         <h3>change a specific form by FORM ID before rendered</h3>
+                        <p class="fragment">getFormId() method defines id to alter</p>
+                    </section>
+                    <section>
+                        <h2>hook_form_FORM_ID_alter()</h2>
                         <pre>
                             <code data-trim contenteditable>
-function mymodule_form_node_form_alter() {
+/**
+ * @file
+ * Contains \Drupal\example\Form\ExampleForm.
+ */
+
+namespace Drupal\example\Form;
+use Drupal\Core\Form\FormBase;
+
+/**
+ * Implements an example form.
+ */
+class ExampleForm extends FormBase {
+    /**
+     * {@inheritdoc}.
+     */
+    public function getFormId() {
+        return 'example_form';
+    }
+}
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>hook_form_FORM_ID_alter()</h2>
+                        <pre>
+                            <code data-trim contenteditable>
+function mymodule_form_example_form_alter() {
     ...
 );
                             </code>
