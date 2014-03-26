@@ -723,6 +723,36 @@ function mymodule_form_example_form_alter() {
                             </code>
                         </pre>
                     </section>
+                    <section>
+                        <h2>More Info on Form API</h2>
+                        <p>https://drupal.org/node/2117411</p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Hooks</h2>
+                        <h3>Engage other processes</h3>
+                    </section>
+                    <section>
+                        <h2>moduleHandler::invokeAll()</h2>
+                        <h3>D7: module_invoke_all()</h3>
+                        <h3>Invoke the hooks</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+\Drupal::moduleHandler->invokeAll($hook, $args);
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>moduleHandler::getImplementations()</h2>
+                        <h3>D7: module_implements()</h3>
+                        <h3>Check a module invokes the hook</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+\Drupal::moduleHandler->getImplementations($hook);
+                            </code>
+                        </pre>
+                    </section>
                 </section>
 
                 <section>
@@ -731,13 +761,17 @@ function mymodule_form_example_form_alter() {
                         <h3>Grab the $_GET</h3>
                     </section>
                     <section>
-                        <h3>drupal_get_query_parameters()</h3>
+                        <h3>UrlHelper::filterQueryParameters()</h3>
+                        <h3>D7: drupal_get_query_parameters()</h3>
                         <h4>process url query</h4>
                         <pre>
                             <code data-trim contenteditable>
+use Drupal\Component\Utility\UrlHelper;
+
 // URL: http://mysite.com?text=foo&date=2013-09-14
 
-$param = drupal_get_query_parameters();
+$url = \Drupal::request()->query->all(); // May not be best way
+$param = UrlHelper::filterQueryParameters($url);
 
 // Values
 // $param['text'] = foo
@@ -759,29 +793,19 @@ $param = drupal_get_query_parameters();
                             <code data-trim contenteditable>
 // Path to a file
 $path = drupal_get_path('theme', 'mytheme') . '/mycustom.js';
-
-// Include CSS or JS
-drupal_add_js($path), array(
-    'type' => 'file',
-    'scope' => 'footer',
-));
-
-// Note: Also consider libraries_get_path()
                             </code>
                         </pre>
                     </section>
                 </section>
 
                 <section>
-                    <h2>module_load_include()</h2>
+                    <h2>moduleHandler->loadInclude()</h2>
+                    <h3>D7: module_load_include()</h3>
                     <h3>loads a module include file</h3>
                     <pre>
                         <code data-trim contenteditable>
 // Load node.admin.inc from the node module.
-module_load_include('inc', 'node', 'node.admin');
-
-// Load content_types.inc from the node module.
-module_load_include('inc', 'node', 'content_types');
+\Drupal::moduleHandler->loadInclude('node', 'inc', 'node.admin');
                         </code>
                     </pre>
                 </section>
