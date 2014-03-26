@@ -263,7 +263,7 @@ $nodes = entity_load_multiple('node', $nids = array())
                         <h3>D7: node_view_multiple()</h3>
                         <h3>a render array of many nodes</h3>
                         <p class="fragment">node_view_multiple wraps around entity_view_multiple</p>
-                        <p class="fragment">entity_view_multiple wraps around $render_controller->viewMultiple()</p>
+                        <p class="fragment">entity_view_multiple wraps around <br>$render_controller->viewMultiple()</p>
                         <p class="fragment">$render_controller is the getViewBuilder for the entity</p>
                         <p class="fragment">The view builder controller is likely EntityViewBuilder class</p>
                     </section>
@@ -276,35 +276,22 @@ $nodes = entity_load_multiple('node', $nids = array())
                         </pre>
                     </section>
                     <section>
-                        <h2>node_delete_multiple()</h2>
-                        <h3>delete nodes from db</h3>
-                        <pre>
-                            <code data-trim contenteditable>
-                                node_delete_multiple($nids = array());
-                            </code>
-                        </pre>
-                    </section>
-                    <section>
-                        <h2>node_object_prepare()</h2>
-                        <h3>prepare object for editing</h3>
-                        <pre>
-                            <code data-trim contenteditable>
-$node = new StdClass();
-
-// Set type first.
-$node->type = 'foobar';
-
-node_object_prepare($node);
-// Note: Current user will be set as uid.
-                            </code>
-                        </pre>
-                    </section>
-                    <section>
-                        <h2>node_save()</h2>
+                        <h2>entity_create()</h2>
+                        <h3>D7: node_save()</h3>
                         <h3>save a node to db</h3>
+                        <p class="fragment">node_save() is gone</p>
+                        <p class="fragment">entity_create wraps around $controller->create()</p>
+                        <p class="fragment">$controller is the StorageController for the entity</p>
+                        <p class="fragment">The storage controller is likely DatabaseStorageController class</p>
+                    </section>
+                    <section>
+                        <h2>entity_create()</h2>
                         <pre>
                             <code data-trim contenteditable>
-node_save($node);
+// Create a new forum instance.
+$node = entity_create('node', array('otherValue' => 'foo'));
+// Save entity to the database.
+$node->save();
 // Note: nothing is returned
                             </code>
                         </pre>
