@@ -393,25 +393,36 @@ return drupal_render($menu);
                         <h3>Categorize content, data.</h3>
                     </section>
                     <section>
-                        <h3>taxonomy_vocabulary_machine_name_load()</h3>
-                        <h4>get vocabulary by machine name</h4>
+                        <h3>entity_load('taxonomy_vocabulary', 'forums')</h3>
+                        <h4>D7: taxonomy_vocabulary_machine_name_load()</h4>
+                        <h5>get vocabulary by machine name</h5>
+                        <p>D7</p>
                         <pre>
                             <code data-trim contenteditable>
 // Get a taxonomy object.
-$v = taxonomy_vocabulary_machine_name_load('vocab');
+$vocabulary = taxonomy_vocabulary_machine_name_load('forums');
+$options[$vocabulary->vid] = $vocabulary->name;
+                            </code>
+                        </pre>
+                        <p>D8</p>
+                        <pre>
+                            <code data-trim contenteditable>
+// Get a taxonomy object.
+$vocabulary = entity_load('taxonomy_vocabulary', 'forums');
+$options[$vocabulary->id()] = $vocabulary->label();
                             </code>
                         </pre>
                     </section>
                     <section>
-                        <h2> taxonomy_get_tree()</h2>
+                        <h2>taxonomy_get_tree()</h2>
                         <h3>create hierarchy from vocab</h3>
                         <pre>
                             <code data-trim contenteditable>
 // Get a taxonomy object.
-$v = taxonomy_vocabulary_machine_name_load('vocab');
+$v = entity_load('taxonomy_vocabulary', 'forums');
 
 // Build an array of taxonomy terms.
-$terms = taxonomy_get_tree($v->vid);
+$terms = taxonomy_get_tree($v->id());
 foreach ($terms as $term) {
     $options[$term->tid] = $term->name;
 }
