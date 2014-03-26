@@ -259,20 +259,19 @@ $nodes = entity_load_multiple('node', $nids = array())
                         </pre>
                     </section>
                     <section>
-                        <h2>node_view()</h2>
-                        <h3>a render array for given node</h3>
-                        <pre>
-                            <code data-trim contenteditable>
-                                $node = node_view($node, $view_mode);
-                            </code>
-                        </pre>
+                        <h2>entity_view_multiple()</h2>
+                        <h3>D7: node_view_multiple()</h3>
+                        <h3>a render array of many nodes</h3>
+                        <p class="fragment">node_view_multiple wraps around entity_view_multiple</p>
+                        <p class="fragment">entity_view_multiple wraps around $render_controller->viewMultiple()</p>
+                        <p class="fragment">$render_controller is the getViewBuilder for the entity</p>
+                        <p class="fragment">The view builder controller is likely EntityViewBuilder class</p>
                     </section>
                     <section>
-                        <h2>node_view_multiple()</h2>
-                        <h3>a render array of many nodes</h3>
+                        <h2>entity_view_multiple()</h2>
                         <pre>
                             <code data-trim contenteditable>
-                                $nodes = node_view_multiple($nodes);
+                                $nodes = entity_view_multiple($nodes);
                             </code>
                         </pre>
                     </section>
