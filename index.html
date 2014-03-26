@@ -304,8 +304,10 @@ $node->save();
                         <h3>Allow users to navigate to content, data.</h3>
                     </section>
                     <section>
-                        <h2>hook_menu()</h2>
+                        <h2>module.routing.yml</h2>
+                        <h3>D7: hook_menu()</h3>
                         <h3>define menu items and callbacks</h3>
+                        <p>D7</p>
                         <pre>
                             <code data-trim contenteditable>
 function mymodule_menu() {
@@ -322,25 +324,45 @@ function mymodule_abc_view($ghi = 0, $jkl = '') {
                         </pre>
                     </section>
                     <section>
-                        <h2>menu_get_item()</h2>
-                        <h3>get a router item</h3>
+                        <h2>module.routing.yml</h2>
+                        <p>D8</p>
                         <pre>
                             <code data-trim contenteditable>
-$item = menu_get_item($path);
-// Note: returns array defined in hook_menu()
+mymodule.add_page:
+    path: 'abc/def'
+    defaults:
+        _content: '\Drupal\mymodule\Controller\MyModuleController::addPage'
+        _title: 'My Module'
+    requirements:
+        _permission: 'administer mymodule foobar'
                             </code>
                         </pre>
                     </section>
                     <section>
-                        <h2>menu_get_object()</h2>
+                        <h2>$request()->attributes->get()</h2>
+                        <h3>D7: menu_get_item()</h3>
+                        <h3>get a router item</h3>
+                        <p>Uses the new routing system from Symfony</p>
+                        <pre>
+                            <code data-trim contenteditable>
+$request = \Drupal::request();
+$route = $request()->attributes->get(RouteObjectInterface::ROUTE_OBJECT);
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>$request()->attributes->get()</h2>
+                        <h3>D7: menu_get_object()</h3>
                         <h3>load an object from router item</h3>
                         <pre>
                             <code data-trim contenteditable>
-$node = menu_get_object();
+$request = \Drupal::request();
+$node = $request()->attributes->get('node');
 $type = $node->type;
 // Note: Use instead of arg()
                             </code>
                         </pre>
+                        <p class="fragment">Discussion: https://drupal.org/node/2124749</p>
                     </section>
                     <section>
                         <h2>menu_tree_page_data()</h2>
