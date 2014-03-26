@@ -4,9 +4,9 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>30 Drupal 7 API Functions You Should Already Know</title>
+		<title>30 Drupal 8 API Functions You Should Already Know</title>
 
-		<meta name="description" content="A story about discovery, trial and error, and having fun!">
+		<meta name="description" content="A quick look at the common API functions you should already be using in Drupal 8!">
 		<meta name="author" content="Fredric Mitchell">
 
 		<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -36,15 +36,12 @@
 
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
-                <section class="front branding-front">
-                    <h1>Presentation Title</h1>
+				<section class="front branding-front">
+					<h1>30 Awesome Drupal 8 API Functions</h1>
+                    <h2>(You Should Already Know)</h2>
                     <div class="date">
-                        <h3>October 26, 20XX</h3>
+                        <h3>April 11, 2014</h3>
                     </div>
-                </section>
-				<section>
-					<h1>30 Awesome Drupal 7 API Functions</h1>
-					<h3>(You Should Already Know)</h3>
 					<p>
 						<small>Created by <a href="http://brightplum.com">Fredric Mitchell</a> / <a href="http://twitter.com/fredricmitchell">@fredricmitchell</a></small>
 					</p>
@@ -95,7 +92,7 @@
 					<section>
                         <h2>URL Shortcuts</h2>
                         <p>Quick and easy ways to find API functions and Drupal projects.</p>
-                        <h3 class="fragment">d7, dp</h3>
+                        <h3 class="fragment">d7, d8, dp</h3>
                     </section>
                     <section>
                         <h2>Firefox</h2>
@@ -109,8 +106,33 @@
 
                 <section>
                     <section>
+                        <h2>Disclaimer! Disclaimer!</h2>
+                        <h3 class="fragment">In D7, "API functions" == Common procedural functions</h3>
+                        <h3 class="fragment">In D8, "API functions" == Common class methods</h3>
+                        <h3 class="fragment">Some cases, procedurals are wrappers for methods</h3>
+                        <h3 class="fragment">Then, and now</h3>
+                    </section>
+                    <section>
+                        <h2>Additional Disclaimer! Disclaimer!</h2>
+                        <h3 class="fragment">All recommendations are based on D8 as of March 25, 2014</h3>
+                        <h3 class="fragment">Things may (and probably will) change</h3>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
                         <h2>Strings</h2>
                         <h3>Print stuff.</h3>
+                    </section>
+                    <section>
+                        <h2>String::checkPlain()</h2>
+                        <h3>D7: check_plain()</h3>
+                        <p>Wrapper for htmlspecialchars with UTF-8 encoding</p>
+                    </section>
+                    <section>
+                        <h2>String::placeholder()</h2>
+                        <h3>D7: drupal_placeholder()</h3>
+                        <p>Wrap &lt;em&gt; around String:checkPlain()</p>
                     </section>
                     <section>
                         <h2>t()</h2>
@@ -118,10 +140,14 @@
                         <pre>
                             <code data-trim contenteditable>
 $text = t(“@name's blog”, array('@name' => $value))
-// Note: @name vs. %name vs. !name
+// Note:
+@name (String::checkPlain())
+vs. %name (String::placeholder())
+vs. !name
                             </code>
                         </pre>
                     </section>
+                </section>
                     <section>
                         <h2>l()</h2>
                         <h3>internal, external url</h3>
@@ -160,6 +186,45 @@ $render = array(
     ),
 );
 return drupal_render($render);
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>D8: drupal_render() is EVERYTHING!</h2>
+                        <h3>Bye-bye theme()</h3>
+                        <p>_theme() is an internal function</p>
+                    </section>
+                    <section>
+                        <p>D7</p>
+                        <pre>
+                            <code data-trim contenteditable>
+// Theme a table with header and row data.
+$markup = theme('table', array(
+    'header' => $header,
+    'rows' => $rows,
+    'attributes' => array('id' => 'my-module-table')
+));
+                                
+// Render a pager.
+$markup .= theme('pager');
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <p>D8</p>
+                        <pre>
+                            <code data-trim contenteditable>
+$table = array(
+    '#type' => 'table',
+    '#header' => $header,
+    '#rows' => $rows,
+    '#attributes' => array('id' => 'my-module-table'),
+);
+$markup = drupal_render($table);
+
+// Pager is not an element type, use #theme directly.
+$pager = array('#theme' => 'pager');
+$markup .= drupal_render($pager);
                             </code>
                         </pre>
                     </section>
