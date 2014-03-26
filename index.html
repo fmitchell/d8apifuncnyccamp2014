@@ -439,7 +439,8 @@ foreach ($terms as $term) {
                     <section>
                         <h2>$fieldInfo->getField()</h2>
                         <h3>D7: field_info_field()</h3>
-                        <h3>return array of field data</h3>
+                        <h3>return field data</h3>
+                        <p class="fragment">Wraps around entity_load('field_config', ...)</p>
                         <pre>
                             <code data-trim contenteditable>
 // Get info a field name.
@@ -451,7 +452,8 @@ $fieldInfo->getField($entity_type, $field_name);
                     <section>
                         <h2>$fieldInfo->getInstance()</h2>
                         <h3>D7: field_info_instance()</h3>
-                        <h3>return an array of field instance data</h3>
+                        <h3>return field instance data</h3>
+                        <p class="fragment">Wraps around entity_load_multiple('field_instance_config', ...)</p>
                         <pre>
                             <code data-trim contenteditable>
 // Get info on field name.
@@ -463,8 +465,17 @@ $fieldInfo->getInstance('node', 'article', 'field_name');
                         </pre>
                     </section>
                     <section>
-                        <h2>field_create_field()</h2>
+                        <h2>entity_create('field_config', $values)</h2>
+                        <h3>D7: field_create_field()</h3>
                         <h3>creates a field</h3>
+                        <p class="fragment">The field configuration (field_config) is now an entity type</p>
+                        <p class="fragment">entity_create() invokes the create method of the StorageController</p>
+                        <p class="fragment">The field_config entity uses FieldConfigStorageController</p>
+                        <p class="fragment">All other methods are in \Drupal\field\Entity\FieldConfig</p>
+                    </section>
+                    <section>
+                        <h2>field_create_field()</h2>
+                        <p>D7</p>
                         <pre>
                             <code data-trim contenteditable>
 // Note: Requires proper field / instance data array which you can get from a features export.
@@ -497,12 +508,36 @@ $field_bases['field_sc_html'] = array(
     'translatable' => 0,
     'type' => 'text_long',
 );
+field_create_field($field_bases);
                             </code>
                         </pre>
                     </section>
                     <section>
-                        <h2>field_create_instance()</h2>
+                        <h2>entity_create('field_config', $values)</h2>
+                        <p>D8</p>
+                        <pre>
+                            <code data-trim contenteditable>
+$field = entity_create('field_config', array(
+    'name' => 'field_description',
+    'entity_type' => 'taxonomy_term',
+    'type' => 'text',
+));
+$field->save();
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>entity_create(<br>'field_instance_config', $values)</h2>
+                        <h3>D7: field_create_instance()</h3>
                         <h3>create instance of field, binding it to a bundle</h3>
+                        <p class="fragment">The field instance configuration (field_instance_config) is now an entity type</p>
+                        <p class="fragment">entity_create() invokes the create method of the StorageController</p>
+                        <p class="fragment">The field_instance_config entity uses FieldInstanceConfigStorageController</p>
+                        <p class="fragment">All other methods are in \Drupal\field\Entity\FieldInstanceConfig</p>
+                    </section>
+                    <section>
+                        <h2>field_create_instance()</h2>
+                        <p>D7</p>
                         <pre>
                             <code data-trim contenteditable>
 // Note: Requires proper field / instance data array which you can get from a features export.
@@ -541,12 +576,29 @@ $field_instances['bean-field_sc_html'] = array(
         'weight' => 2,
     ),
 );
+field_create_instance($field_instances);
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>entity_create(<br>'field_instance_config', $values)</h2>
+                        <p>D8</p>
+                        <pre>
+                            <code data-trim contenteditable>
+$field_instance = entity_create('field_instance_config', array(
+    'field_name' => 'field_description',
+    'entity_type' => 'taxonomy_term',
+    'bundle' => 'tags',
+    'label' => 'Custom tag description',
+));
+$field_instance->save();
                             </code>
                         </pre>
                     </section>
                     <section>
                         <h2>Bonus!</h2>
                         <h3>Using the field API functions</h3>
+                        <p>D7</p>
                         <pre>
                             <code data-trim contenteditable>
 function mymodule_install_fields($fields, $instance_fields, $type = 'node', $bundle) {
@@ -565,6 +617,12 @@ function mymodule_install_fields($fields, $instance_fields, $type = 'node', $bun
 }
                             </code>
                         </pre>
+                    </section>
+                    <section>
+                        <h2>Bonus!</h2>
+                        <h3>Using the <strike>field</strike> entity API functions</h3>
+                        <p>D8</p>
+                        <p>?</p>
                     </section>
                     <section>
                         <h2>field_update_field()</h2>
