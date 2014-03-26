@@ -437,25 +437,28 @@ foreach ($terms as $term) {
                         <h3>Organize content, data at various pivot points.</h3>
                     </section>
                     <section>
-                        <h2>field_info_field()</h2>
+                        <h2>$fieldInfo->getField()</h2>
+                        <h3>D7: field_info_field()</h3>
                         <h3>return array of field data</h3>
                         <pre>
                             <code data-trim contenteditable>
 // Get info a field name.
-field_info_field('field_name');
+$fieldInfo = \Drupal\field\Field::fieldInfo();
+$fieldInfo->getField($entity_type, $field_name);
                             </code>
                         </pre>
                     </section>
                     <section>
-                        <h2>field_info_instance()</h2>
+                        <h2>$fieldInfo->getInstance()</h2>
+                        <h3>D7: field_info_instance()</h3>
                         <h3>return an array of field instance data</h3>
                         <pre>
                             <code data-trim contenteditable>
 // Get info on field name.
-field_info_field('field_name');
+$fieldInfo = \Drupal\field\Field::fieldInfo();
 
 // Get info on instance of field name from a bundle.
-field_info_instance('node', 'field_name', 'article');
+$fieldInfo->getInstance('node', 'article', 'field_name');
                             </code>
                         </pre>
                     </section>
