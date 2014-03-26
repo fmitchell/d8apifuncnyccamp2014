@@ -56,8 +56,8 @@
                         <li class="fragment">Show Me the Code!</li>
                         <li class="fragment">Written something custom (familiar with PHP)</li>
                         <li class="fragment">You like using APIs</li>
-                        <li class="fragment">Want to learn the "Drupal Way"</li>
                         <li class="fragment">Drupal as framework</li>
+                        <li class="fragment">KDS: http://bit.ly/p2-kds</li>
                     </ol>
                 </section>
 
@@ -620,7 +620,7 @@ function mymodule_install_fields($fields, $instance_fields, $type = 'node', $bun
                     </section>
                     <section>
                         <h2>Bonus!</h2>
-                        <h3>Using the <strike>field</strike> entity API functions</h3>
+                        <h3>Using the <strike>field</strike>  entity API functions</h3>
                         <p>D8</p>
                         <p>?</p>
                     </section>
@@ -744,7 +744,7 @@ function mymodule_form_example_form_alter() {
                         </pre>
                     </section>
                     <section>
-                        <h2>moduleHandler::getImplementations()</h2>
+                        <h2>moduleHandler<br>::getImplementations()</h2>
                         <h3>D7: module_implements()</h3>
                         <h3>Check a module invokes the hook</h3>
                         <pre>
@@ -816,8 +816,12 @@ $path = drupal_get_path('theme', 'mytheme') . '/mycustom.js';
                         <h3>Join ALL the tables!</h3>
                     </section>
                     <section>
-                        <h2>EntityFieldQuery</h2>
-                        <h3>a class to query entities</h3>
+                        <h2>\Drupal::entityQuery()</h2>
+                        <h3>D7: EntityFieldQuery</h3>
+                        <h3>search a single entity</h3>
+                    </section>
+                    <section>
+                        <h2>D7: EntityFieldQuery</h2>
                         <pre>
                             <code data-trim contenteditable>
 // Query articles
@@ -831,67 +835,134 @@ $query
 $result = $query->execute();
 $nids = array_keys($result['node']);
 $nodes = node_load_multiple($nids);
-
-// Note: EFQ presentation at http://bit.ly/top10efq
                             </code>
                         </pre>
+                        <p class="fragment">EFQ presentation at http://bit.ly/top10efq</p>
+                    </section>
+                    <section>
+                        <h2>\Drupal::entityQuery()</h2>
+                        <pre>
+                            <code data-trim contenteditable>
+$query = \Drupal::entityQuery('taxonomy_term')
+    ->condition('tid', $term->id())
+    ->condition('vid', $term->bundle())
+    ->range(0, 1)
+    ->count()
+    ->execute();
+                            </code>
+                        </pre>
+                        <p class="fragment">https://drupal.org/node/1827278</p>
                     </section>
                 </section>
 
                 <section>
                     <section>
+                        <h2>Was that 30?</h2>
+                        <h3>Kind of didn't feel like it.</h3>
+                        <p class="fragment">What about functions completely removed?</p>
+                    </section>
+                    <section>
+                        <h2>#attached</h2>
+                        <h3>D7: drupal_add_js, drupal_add_css, drupal_add_library</h3>
+                        <p class="fragment">Gone!</p>
+                        <p class="fragment">https://drupal.org/node/2169605</p>
+                    </section>
+                    <section>
+                        <h2>#attached</h2>
+                        <pre>
+                            <code data-trim contenteditable>
+// within CKEditor
+public function settingsForm(array $form, array &$form_state, EditorEntity $editor) {
+    $ckeditor_settings_toolbar = array(
+        '#theme' => 'ckeditor_settings_toolbar',
+        '#editor' => $editor,
+        '#plugins' => $this->ckeditorPluginManager->getButtons(),
+    );
+    $form['toolbar'] = array(
+        '#type' => 'container',
+        '#attached' => array(
+            'library' => array('ckeditor/drupal.ckeditor.admin'),
+            'js' => array(
+                array(
+                    'type' => 'setting',
+                    'data' => array('ckeditor' => array(
+                    'toolbarAdmin' => drupal_render($ckeditor_settings_toolbar),
+                )),
+            )
+        ),
+    ),
+    '#attributes' => array('class' => array('ckeditor-toolbar-configuration')),
+);
+                            </code>
+                        </pre>
+                    </section>
+                </section>
+                <section>
+                    <section>
                         <h2>1 - 10</h2>
                         <ul>
                             <li>t()</li>
+                            <li>String::checkPlain()</li>
+                            <li>String::placeholder()</li>
                             <li>l()</li>
                             <li>drupal_render()</li>
-                            <li>entity_load()</li>
-                            <li>node_load_multiple()</li>
-                            <li>node_view()</li>
-                            <li>node_view_multiple()</li>
-                            <li>node_delete_multiple()</li>
-                            <li>node_object_prepare()</li>
-                            <li>node_save()</li>
+                            <li><strike>node_load_multiple()</strike>  entity_load_multiple()</li>
+                            <li><strike>node_view_multiple()</strike>  entity_view_multiple()</li>
+                            <li><strike>node_save()</strike>  entity_create()</li>
+                            <li><strike>hook_menu()</strike> module.routing.yml</li>
+                            <li><strike>menu_get_item()</strike> $request()->attributes->get()</li>
                         </ul>
                     </section>
                     <section>
-                        <h2>11 - 20</h2>
+                        <h2>11 - <strike>20</strike>  17</h2>
                         <ul>
-                            <li>hook_menu()</li>
-                            <li>menu_get_item()</li>
-                            <li>menu_get_object()</li>
+                            <li><strike>menu_get_object()</strike> $request()->attributes->get()</li>
                             <li>menu_tree_page_data()</li>
                             <li>menu_tree_output()</li>
                             <li>taxonomy_get_tree()</li>
-                            <li>taxonomy_vocabulary_machine_name_load()</li>
-                            <li>field_info_field()</li>
-                            <li>field_info_instance()</li>
-                            <li>field_create_field()</li>
+                            <li><strike>taxonomy_vocabulary_machine_name_load()</strike> entity_load('taxonomy_vocabulary', 'forums')</li>
+                            <li><strike>field_info_field()</strike> $fieldInfo->getField()</li>
+                            <li><strike>field_info_instance()</strike> $fieldInfo->getInstance()</li>
+                            <li><strike>field_create_field()</strike> entity_create('field_config', $values)</li>
+                            <li><strike>field_create_instance()</strike> entity_create('field_instance_config', $values)</li>
+                            <li><strike>field_update_field()</strike> save()</li>
                         </ul>
                     </section>
                     <section>
-                        <h2>21 - 30</h2>
+                        <h2>18 - 28</h2>
                         <ul>
-                            <li>field_create_instance()</li>
-                            <li>field_update_field()</li>
-                            <li>field_update_instance()</li>
-                            <li>drupal_alter()</li>
+                            <li><strike>field_update_instance()</strike> save()</li>
+                            <li><strike>drupal_alter()</strike> ModuleHandler::alter()</li>
                             <li>hook_form_alter()</li>
                             <li>hook_form_FORM_ID_alter()</li>
-                            <li>drupal_get_query_parameters()</li>
+                            <li>moduleHandler::invokeAll()</li>
+                            <li>moduleHandler::getImplementations()</li>
+                            <li><strike>drupal_get_query_parameters()</strike> UrlHelper::filterQueryParameters()</li>
                             <li>drupal_get_path()</li>
-                            <li>module_load_include()</li>
-                            <li>EntityFieldQuery</li>
+                            <li><strike>module_load_include()</strike> moduleHandler->loadInclude()</li>
+                            <li><strike>EntityFieldQuery</strike> \Drupal::entityQuery()</li>
                         </ul>
                     </section>
+
+                    <section>
+                        <h2>So, it wasn't 30</h2>
+                        <p class="fragment">Technically, no.</p>
+                        <p class="fragment">#attached could be a +3</p>
+                        <p class="fragment"><strike>drupal_add_js, drupal_add_css, drupal_add_library</strike></p>
+                    </section>
+                </section>
+
+                <section>
+                    <h2>What's Next?</h2>
+                    <p class="fragment">Contribute to Examples: https://drupal.org/project/examples</p>
+                    <p class="fragment">Read docs: https://drupal.org/developing/api/8</p>
                 </section>
 
 				<section>
 					<h2>Questions?</h2>
 					<h3>By Fredric Mitchell / @fredricmitchell</h3>
-                    <p><strong>Slides:</strong> http://brightplumbox.com/30Drupal7API/</p>
+                    <p><strong>Slides:</strong> http://brightplumbox.com/30Drupal8API/</p>
                     <p><strong>Slides Repo:</strong> https://github.com/fmitchell/30Drupal7API</p>
-                    <p><strong>Feedback:</strong> joind.in/talk/view/10311</p>
 				</section>
 
 			</div>
