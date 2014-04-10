@@ -615,12 +615,6 @@ function mymodule_install_fields($fields, $instance_fields, $type = 'node', $bun
                         </pre>
                     </section>
                     <section>
-                        <h2>Bonus!</h2>
-                        <h3>Using the <strike>field</strike>  entity API functions</h3>
-                        <p>D8</p>
-                        <p>?</p>
-                    </section>
-                    <section>
                         <h2>save()</h2>
                         <h3>D7: field_update_field()</h3>
                         <h3>D7: field_update_instance()</h3>
@@ -789,6 +783,31 @@ $param = UrlHelper::filterQueryParameters($url);
                             <code data-trim contenteditable>
 // Path to a file
 $path = drupal_get_path('theme', 'mytheme') . '/mycustom.js';
+                            </code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>User</h2>
+                        <h3>Who am I?</h3>
+                        <p>D7: global $user</p>
+                    </section>
+                    <section>
+                        <h2>User</h2>
+                        <h3>Who am I?</h3>
+                        <p>D8: \Drupal::currentUser()</p>
+                        <p class="fragment">https://drupal.org/node/2032447</p>
+                    </section>
+                    <section>
+                        <h2>User</h2>
+                        <h3>Who am I?</h3>
+                        <pre>
+                            <code data-trim contenteditable>
+$account = \Drupal::currentUser();
+if ($account->id() == 1) {
+    return "Hiya, boss!";
+}
+// $account is not an actual User object, but UserSession object
+// Extends AccountInterface class
                             </code>
                         </pre>
                     </section>
